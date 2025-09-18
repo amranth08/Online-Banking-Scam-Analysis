@@ -121,4 +121,3 @@ PROJECT WORKFLOW
 
 Amaranth Prakash
 16th Sep, 2025
-<img width="451" height="692" alt="image" src="https://github.com/user-attachments/assets/94ad669b-9b76-4960-bc4a-37de49c3d166" />

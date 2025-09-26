@@ -1,123 +1,135 @@
-# Online-Banking-Scam-Analysis
+# 🏦 Online-Banking-Scam-Analysis
 
-PROJECT OVERVIEW
+## 📌 Project Overview
+Account Takeover (ATO) fraud is one of the most damaging types of online banking scams.  
+Fraudsters gain unauthorized access to customer accounts (through phishing, stolen credentials, or malware) and perform illegal transactions.  
 
-Account Takeover (ATO) is one of the most damaging types of online banking fraud. Fraudsters gain unauthorized access to customer accounts (through phishing, credential leaks, or malware) and perform illegal transactions.
+This project applies **data analytics and machine learning (Random Forest)** to detect suspicious login and transaction patterns that indicate potential ATO fraud.  
+The system analyzes transaction data, identifies anomalies, and flags high-risk activities before financial damage occurs.  
 
-This project applies data analytics and machine learning to detect suspicious login and transaction patterns that indicate potential ATO attacks. The goal is to build a system that can analyse transaction data, identify anomalies, and flag high-risk activities before financial damage occurs.
+---
 
+## 🎯 Objectives
+- Understand behavioural differences between legitimate users and fraudsters.  
+- Detect unusual login behaviours (e.g., repeated failed login attempts).  
+- Flag suspicious transactions following compromised logins.  
+- Build a **Random Forest classifier** to predict fraud.  
+- Provide **visual insights via dashboards in Power BI** for fraud analysts.  
 
-OBJECTIVES
+---
 
-•	Understand behavioural differences between legitimate users and fraudsters.
-•	Detects unusual login behaviours (new device, foreign IP, odd login time).
-•	Flag suspicious transactions following compromised logins.
-•	Build predictive models to classify or detect anomalies.
-•	Provide visual insights through dashboards.
+## 📂 Dataset
+The dataset contains transaction records with fraud labels.  
 
+### Example Fields
+| Column | Description |
+|--------|-------------|
+| `TransactionID` | Unique transaction identifier (dropped in training) |
+| `AccountID` | Customer account number (dropped in training) |
+| `TransactionAmount` | Amount of money in the transaction |
+| `TransactionDate` | Transaction date |
+| `TransactionTime` | Transaction time |
+| `TransactionType` | Debit / Credit |
+| `Location` | City where the transaction occurred |
+| `DeviceID` | Device identifier (dropped in training) |
+| `IP Address` | IP address of session (dropped in training) |
+| `MerchantID` | Merchant identifier (dropped in training) |
+| `Channel` | Transaction channel (Online / ATM / Branch) |
+| `CustomerAge` | Age of customer |
+| `CustomerOccupation` | Occupation of customer |
+| `TransactionDuration` | Session duration |
+| `LoginAttempts` | Number of login attempts before success |
+| `AccountBalance` | Balance after transaction |
+| `PreviousTransactionDate` | Timestamp of last transaction |
+| `is_fraud` | Target label → `1 = Fraud`, `0 = Genuine` |
 
-DATASET
+---
 
-The dataset consists of synthetic banking login and transaction records with fraud labels.
+## ⚙️ Methods
 
-Example Fields
+### 🔹 Data Preprocessing
+- Dropped non-predictive identifiers (`TransactionID`, `AccountID`, `DeviceID`, `IP Address`, `MerchantID`).  
+- Combined `Transation_Date` + `Transaction_Time` → `TransactionDateTime`.  
+- Converted datetime features into **numeric timestamps**.  
+- Encoded categorical variables using **LabelEncoder**.  
+- Scaled numeric features with **StandardScaler**.  
+- Split dataset: **70% training / 30% testing**.  
 
-Login Data
-•	login_id: Unique login attempt ID
-•	account_id: Customer account number
-•	timestamp: Login time
-•	device_id: Device fingerprint
-•	ip_country: Login country
-•	login_success: 1 if login succeeded, 0 if failed
+### 🔹 Exploratory Data Analysis (EDA) in Power BI
+- Fraud rate by **transaction type, location, channel**.  
+- Fraud count vs **login attempts**.  
+- **Customer age vs transaction amount** (fraud vs non-fraud).  
+- **Transaction duration analysis** (normal vs suspicious).  
+- Dashboard KPIs: fraud rate, fraud losses, suspicious accounts.  
 
-Transaction Data
-•	transaction_id: Transaction unique ID
-•	account_id: Customer account
-•	timestamp: Transaction time
-•	amount: Transaction amount
-•	transaction_type: (transfer, payment, withdrawal)
-•	destination_country: Receiver’s country
-•	is_new_payee: Whether the payee is new
-•	is_fraud: 1 = fraudulent, 0 = genuine
+### 🔹 Feature Engineering
+- Login anomalies → multiple login attempts.  
+- Transaction anomalies → large transfer amounts, account draining.  
+- Demographic risk → elderly victims with large transfers.  
+- Behavioural → short session duration, frequent rapid transactions.  
 
+### 🔹 Modeling
+- Algorithm: **Random Forest Classifier**  
+  - `n_estimators = 200`  
+  - `max_depth = 12`  
+  - `class_weight = 'balanced'`  
+- Compared against Logistic Regression baseline.  
+- Random Forest chosen for **higher recall and ROC-AUC**.  
 
-METHODS
+### 🔹 Evaluation Metrics
+- **Confusion Matrix**  
+- **Classification Report** (Precision, Recall, F1-score)  
+- **ROC-AUC Score**  
+- **Precision-Recall AUC** (better for imbalanced data)  
 
-1. Data Preprocessing
-•	Convert timestamps → derive features (hour, day_of_week).
-•	Handle missing values & duplicates.
-•	Encode categorical fields (country, device, transaction type).
-•	Normalize long-tailed features (log-transform amount).
-2. Exploratory Data Analysis (EDA)
-•	Fraud rate by transaction type, hour, device, and country.
-•	Login success vs failed attempts.
-•	Geographic fraud hotspots (IP vs account country).
-•	Boxplots for transaction amounts (fraud vs legit).
-3. Feature Engineering
-•	Login anomalies: is_new_device, is_new_location, num_failed_logins.
-•	Transaction anomalies: amount/avg_amount_30d, is_new_payee, cross_border_txn.
-•	Behavioural features: txn_velocity_1h, txn_count_24h, time_gap_between_login_and_txn.
-4. Modelling Approaches
-Supervised Learning (if labels available)
-•	Logistic Regression → interpretable baseline.
-•	Random Forest / XGBoost → strong classifiers with feature importance.
-•	Neural Networks (MLP) → capture nonlinear patterns.
-Unsupervised Learning (if no labels)
-•	Isolation Forest → anomaly detection on transaction features.
-•	Autoencoder → reconstruction error flags unusual transactions.
-•	One-Class SVM → learns “normal” behaviour, flags outliers.
-5. Evaluation Metrics
-•	Precision, Recall, F1-score → fraud detection effectiveness.
-•	ROC-AUC, PR-AUC → model robustness (PR-AUC better for imbalance).
-•	Precision@K → % of real frauds in top K alerts.
-•	Cost-based metric → savings from blocked frauds vs false alarms.
-6. Explainability
-•	SHAP values → explain why a transaction was flagged.
-•	Feature importance plots → key fraud indicators.
-•	Rule extraction → human-readable fraud rules (e.g., “High-value transfer from new device at 2 AM”).
+#### ✅ Example Results (Random Forest)
+- Accuracy: **98%**  
+- Recall (Fraud): **82%**  
+- ROC-AUC: **0.99**  
+- Precision-Recall AUC: **0.98**  
 
-TOOLS & TECHNOLOGIES
+---
 
-•	Programming: Python (pandas, numpy, scikit-learn, imbalanced-learn, xgboost, matplotlib, seaborn).
-•	Anomaly Detection: IsolationForest, Autoencoder (Keras/PyTorch).
-•	Visualization/Dashboard: Power BI / Tableau / Streamlit.
-•	Data Storage: CSV / SQL database.
-•	Version Control: GitHub.
-•	Documentation: Jupyter Notebooks, Markdown reports.
+## 🛠️ Tools & Technologies
+- **Python** → pandas, numpy, scikit-learn, imbalanced-learn  
+- **Modeling** → Random Forest Classifier  
+- **Visualization** → Power BI  
+- **Data Storage** → Excel dataset  
+- **Model Persistence** → joblib (`rf_fraud_model.pkl`, `scaler.pkl`, `label_encoders.pkl`)  
+- **Version Control** → GitHub  
 
-DASHBOARD (INSIGHTS FOR ANALYSTS)
+---
 
-Key components of fraud monitoring dashboard:
-•	KPIs: total transactions, fraud count, fraud rate, total fraud losses.
-•	Time series: fraud attempts per day/hour.
-•	Geo map: fraud origin vs destination countries.
-•	Top risky accounts and devices.
-•	Recent alerts: suspicious transactions with explanations.
+## 📊 Dashboard Insights (Power BI)
+Fraud monitoring dashboard includes:  
+- **KPIs** → total transactions, fraud count, fraud rate  
+- **Fraud distribution** → by channel, location, transaction type  
+- **Time series** → fraud attempts over time  
+- **Customer demographics** → age group risk patterns  
+- **Top risky accounts** → accounts with multiple suspicious transactions  
 
-DELIVERABLES
+---
 
-1.	Synthetic Dataset (CSV with login + transaction records).
-2.	EDA Notebook – trends, fraud patterns, visualizations.
-3.	Model Notebook – preprocessing, feature engineering, fraud detection model.
-4.	Explainability Report – SHAP values, feature impacts.
-5.	Dashboard (Power BI / Streamlit).
-6.	Final Report – methods, results, business implications.
-7.	Presentation Slides – problem → data → analysis → results → demo.
+## 📦 Deliverables
+- Processed dataset  
+- Power BI dashboard (EDA + fraud insights)  
+- Python scripts: `training.py` (train model), `testing.py` (predict new data)  
+- Trained artifacts: `rf_fraud_model.pkl`, `scaler.pkl`, `label_encoders.pkl`  
+- Final documentation (methods, results, implications)  
+- Presentation slides  
 
-PROJECT WORKFLOW
+---
 
-1.	Data Collection / Synthetic Data Generation.
-2.	Data Cleaning & Preprocessing.
-3.	Exploratory Data Analysis (EDA).
-4.	Feature Engineering.
-5.	Model Training & Evaluation.
-6.	Explainability & Fraud Rules.
-7.	Dashboard Development.
-8.	Report & Presentation.
+## 🔄 Project Workflow
+1. Data Cleaning & Preprocessing  
+2. Exploratory Data Analysis (**Power BI**)  
+3. Feature Engineering  
+4. Model Training (**Random Forest**)  
+5. Model Evaluation  
+6. Fraud Detection Dashboard  
+7. Documentation & Reporting  
 
+---
 
-
-
-
-Amaranth Prakash
-16th Sep, 2025
+👤 **Prepared by**: Amaranth Prakash  
+📅 **Date**: 16th Sep, 2025  

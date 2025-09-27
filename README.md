@@ -1,6 +1,6 @@
 # 🏦 Online-Banking-Scam-Analysis
 
-## 📌 Project Overview
+## Project Overview
 Account Takeover (ATO) fraud is one of the most damaging types of online banking scams.  
 Fraudsters gain unauthorized access to customer accounts (through phishing, stolen credentials, or malware) and perform illegal transactions.  
 
@@ -9,7 +9,7 @@ The system analyzes transaction data, identifies anomalies, and flags high-risk 
 
 ---
 
-## 🎯 Objectives
+## Objectives
 - Understand behavioural differences between legitimate users and fraudsters.  
 - Detect unusual login behaviours (e.g., repeated failed login attempts).  
 - Flag suspicious transactions following compromised logins.  
@@ -18,7 +18,7 @@ The system analyzes transaction data, identifies anomalies, and flags high-risk 
 
 ---
 
-## 📂 Dataset
+## Dataset
 The dataset contains transaction records with fraud labels.  
 
 ### Example Fields
@@ -45,9 +45,9 @@ The dataset contains transaction records with fraud labels.
 
 ---
 
-## ⚙️ Methods
+## Methods
 
-### 🔹 Data Preprocessing
+### Data Preprocessing
 - Dropped non-predictive identifiers (`TransactionID`, `AccountID`, `DeviceID`, `IP Address`, `MerchantID`).  
 - Combined `Transation_Date` + `Transaction_Time` → `TransactionDateTime`.  
 - Converted datetime features into **numeric timestamps**.  
@@ -55,20 +55,20 @@ The dataset contains transaction records with fraud labels.
 - Scaled numeric features with **StandardScaler**.  
 - Split dataset: **70% training / 30% testing**.  
 
-### 🔹 Exploratory Data Analysis (EDA) in Power BI
+### Exploratory Data Analysis (EDA) in Power BI
 - Fraud rate by **transaction type, location, channel**.  
 - Fraud count vs **login attempts**.  
 - **Customer age vs transaction amount** (fraud vs non-fraud).  
 - **Transaction duration analysis** (normal vs suspicious).  
 - Dashboard KPIs: fraud rate, fraud losses, suspicious accounts.  
 
-### 🔹 Feature Engineering
+### Feature Engineering
 - Login anomalies → multiple login attempts.  
 - Transaction anomalies → large transfer amounts, account draining.  
 - Demographic risk → elderly victims with large transfers.  
 - Behavioural → short session duration, frequent rapid transactions.  
 
-### 🔹 Modeling
+### Modeling
 - Algorithm: **Random Forest Classifier**  
   - `n_estimators = 200`  
   - `max_depth = 12`  
@@ -76,13 +76,13 @@ The dataset contains transaction records with fraud labels.
 - Compared against Logistic Regression baseline.  
 - Random Forest chosen for **higher recall and ROC-AUC**.  
 
-### 🔹 Evaluation Metrics
+### Evaluation Metrics
 - **Confusion Matrix**  
 - **Classification Report** (Precision, Recall, F1-score)  
 - **ROC-AUC Score**  
 - **Precision-Recall AUC** (better for imbalanced data)  
 
-#### ✅ Example Results (Random Forest)
+#### Example Results (Random Forest)
 - Accuracy: **98%**  
 - Recall (Fraud): **82%**  
 - ROC-AUC: **0.99**  
@@ -90,7 +90,7 @@ The dataset contains transaction records with fraud labels.
 
 ---
 
-## 🛠️ Tools & Technologies
+## Tools & Technologies
 - **Python** → pandas, numpy, scikit-learn, imbalanced-learn  
 - **Modeling** → Random Forest Classifier  
 - **Visualization** → Power BI  
@@ -100,7 +100,7 @@ The dataset contains transaction records with fraud labels.
 
 ---
 
-## 📊 Dashboard Insights (Power BI)
+## Dashboard Insights (Power BI)
 Fraud monitoring dashboard includes:  
 - **KPIs** → total transactions, fraud count, fraud rate  
 - **Fraud distribution** → by channel, location, transaction type  
@@ -110,7 +110,7 @@ Fraud monitoring dashboard includes:
 
 ---
 
-## 📦 Deliverables
+## Deliverables
 - Processed dataset  
 - Power BI dashboard (EDA + fraud insights)  
 - Python scripts: `training.py` (train model), `testing.py` (predict new data)  
@@ -120,7 +120,7 @@ Fraud monitoring dashboard includes:
 
 ---
 
-## 🔄 Project Workflow
+## Project Workflow
 1. Data Cleaning & Preprocessing  
 2. Exploratory Data Analysis (**Power BI**)  
 3. Feature Engineering  
@@ -131,5 +131,5 @@ Fraud monitoring dashboard includes:
 
 ---
 
-👤 **Prepared by**: Amaranth Prakash  
-📅 **Date**: 16th Sep, 2025  
+**Prepared by**: Amaranth Prakash  
+**Date**: 16th Sep, 2025  

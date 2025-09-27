@@ -41,10 +41,11 @@ def preprocess_new_input(new_df):
     num_scaled = scaler.transform(df_copy)
     return num_scaled
 
+# example for non-fraudulent transactoin
 new_data = pd.DataFrame([{
     'TransactionAmount': 8000,
-    'Transation_Date': '20/11/23',       # same column name as training
-    'Transaction_Time': '16:39:15',      # keep separate, will merge later
+    'Transation_Date': '20/11/23',       
+    'Transaction_Time': '16:39:15',      
     'TransactionType': 'Debit',
     'Location': 'City_X',
     'Channel': 'Online',
@@ -56,8 +57,9 @@ new_data = pd.DataFrame([{
     'PreviousTransactionDate': '18/11/23 10:00:00'
 }])
 
+# example for fraudulent transaction
 new_data = pd.DataFrame([{
-    'TransactionAmount': 15000,                 # > 10,000 → high-risk
+    'TransactionAmount': 15000,                # > 10,000 → high-risk
     'Transation_Date': '20/11/23',             # recent date
     'Transaction_Time': '00:05:10',            # unusual midnight transaction
     'TransactionType': 'Debit',
